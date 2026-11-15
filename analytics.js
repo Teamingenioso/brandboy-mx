@@ -32,6 +32,8 @@ window.BB = (function () {
 
   function hide() { if (banner) { banner.remove(); banner = null; } }
 
+  var COOKIE_SVG = '<svg viewBox="0 0 80 80" aria-hidden="true" focusable="false"><circle cx="40" cy="40" r="36" fill="#c8864a"/><circle cx="40" cy="40" r="35" fill="none" stroke="#a5602c" stroke-width="2"/><g fill="#4a2414"><circle cx="25" cy="27" r="4.5"/><circle cx="50" cy="22" r="3.5"/><circle cx="58" cy="44" r="5"/><circle cx="34" cy="50" r="4"/><circle cx="21" cy="44" r="3"/><circle cx="45" cy="63" r="3.2"/><circle cx="63" cy="62" r="2.4"/></g></svg>';
+
   function show() {
     if (banner) return;
     banner = document.createElement('div');
@@ -39,8 +41,23 @@ window.BB = (function () {
     banner.setAttribute('role', 'region');
     banner.setAttribute('aria-label', 'Aviso de cookies');
 
+    var x = document.createElement('button');
+    x.type = 'button'; x.className = 'bb-x'; x.setAttribute('aria-label', 'Cerrar y no aceptar'); x.textContent = '×';
+
+    var icon = document.createElement('div');
+    icon.className = 'bb-cookie';
+    icon.innerHTML = COOKIE_SVG;
+
+    var body = document.createElement('div');
+    body.className = 'bb-cbody';
+
+    var title = document.createElement('p');
+    title.className = 'bb-title';
+    title.textContent = 'Usamos cookies';
+
     var p = document.createElement('p');
-    p.appendChild(document.createTextNode('Uso Google Analytics para saber cuánta gente visita la página y qué le interesa. No guarda tu nombre ni tu teléfono. '));
+    p.className = 'bb-text';
+    p.appendChild(document.createTextNode('Las usamos para mejorar tu experiencia. '));
     var link = document.createElement('a');
     link.href = 'privacidad.html';
     link.textContent = 'Políticas de privacidad';
@@ -51,12 +68,15 @@ window.BB = (function () {
     var no = document.createElement('button');
     no.type = 'button'; no.className = 'no'; no.textContent = 'No, gracias';
     var yes = document.createElement('button');
-    yes.type = 'button'; yes.textContent = 'Aceptar';
-    no.addEventListener('click', function () { write('denied'); hide(); });
+    yes.type = 'button'; yes.textContent = 'Aceptar galleta';
+    function decline() { write('denied'); hide(); }
+    x.addEventListener('click', decline);
+    no.addEventListener('click', decline);
     yes.addEventListener('click', function () { write('granted'); hide(); load(); });
     btns.appendChild(no); btns.appendChild(yes);
 
-    banner.appendChild(p); banner.appendChild(btns);
+    body.appendChild(title); body.appendChild(p);
+    banner.appendChild(x); banner.appendChild(icon); banner.appendChild(body); banner.appendChild(btns);
     document.body.appendChild(banner);
   }
 

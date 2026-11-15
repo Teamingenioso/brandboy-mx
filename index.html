@@ -470,23 +470,28 @@
   .bb-consent {
     position: fixed; z-index: 2147483600; left: 12px; right: 12px; margin: 0 auto;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    max-width: 560px; box-sizing: border-box;
-    display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px;
-    padding: 16px 18px; border-radius: 20px;
-    border: 1px solid rgba(240,244,228,.16); background: rgba(17,21,12,.94);
-    backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-    color: #f0f4e4; font: 500 .88rem/1.45 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    max-width: 420px; box-sizing: border-box;
+    display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: start;
+    padding: 18px 18px 16px; border-radius: 22px;
+    border: 1px solid rgba(183,224,70,.22); background: #161c0e;
+    color: #f0f4e4; font: 500 .9rem/1.45 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     letter-spacing: 0; text-transform: none; text-align: left;
-    box-shadow: 0 20px 50px -16px rgba(0,0,0,.8);
+    box-shadow: 0 24px 50px -14px rgba(0,0,0,.85);
   }
-  .bb-consent p { margin: 0; flex: 1 1 260px; }
-  .bb-consent a { color: #e6ff8f; }
-  .bb-consent-btns { display: flex; gap: 8px; flex: 0 0 auto; margin-left: auto; }
+  .bb-cookie { width: 76px; height: 76px; }
+  .bb-cookie svg { display: block; width: 100%; height: 100%; }
+  .bb-cbody { min-width: 0; }
+  .bb-title { margin: 0 22px 6px 0; font-family: "Anton", Impact, "Arial Narrow", sans-serif; font-weight: 400; font-size: 1.5rem; line-height: 1.05; letter-spacing: .02em; text-transform: uppercase; color: #f0f4e4; }
+  .bb-text { margin: 0 0 14px; font-size: .86rem; color: rgba(240,244,228,.78); }
+  .bb-text a { color: #e6ff8f; }
+  .bb-consent-btns { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .bb-consent-btns button { width: 100%; }
   .bb-consent button {
-    min-height: 44px; padding: 0 18px; border-radius: 14px; border: 0; cursor: pointer;
-    font: 600 .9rem/1 inherit; font-family: inherit; background: #b7e046; color: #080a06;
+    min-height: 40px; padding: 0 16px; border-radius: 999px; border: 0; cursor: pointer;
+    font: 600 .88rem/1 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif; background: #b7e046; color: #080a06;
   }
-  .bb-consent button.no { background: transparent; color: #f0f4e4; box-shadow: inset 0 0 0 1px rgba(240,244,228,.3); }
+  .bb-consent button.no { background: transparent; color: #f0f4e4; box-shadow: inset 0 0 0 1.5px rgba(240,244,228,.4); }
+  .bb-consent .bb-x { position: absolute; top: 8px; right: 10px; min-height: 0; padding: 2px 8px; background: transparent; color: rgba(240,244,228,.6); font-size: 1.4rem; line-height: 1; box-shadow: none; border-radius: 8px; }
   .bb-consent button:focus-visible { outline: 2px solid #e6ff8f; outline-offset: 2px; }
 
 
