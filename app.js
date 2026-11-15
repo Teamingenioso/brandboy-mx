@@ -337,3 +337,29 @@
     dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
     toast.addEventListener('click', function () { toast.classList.remove('show'); });
   })();
+
+
+(function () {
+  'use strict';
+  var dlg = document.getElementById('slDlg');
+  var trigger = document.querySelector('[data-slots]');
+  if (!dlg || !trigger) return;
+  function track(name) { if (window.BB && window.BB.track) window.BB.track(name, {}); }
+  trigger.addEventListener('click', function () { if (!dlg.open) { dlg.showModal(); track('plazas_abiertas'); } });
+  document.getElementById('slClose').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  document.getElementById('slCal').addEventListener('click', function () {
+    var ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Brandboy//Plazas//ES', 'BEGIN:VEVENT',
+      'UID:plazas-brandboy-20270131@brandboy.mx', 'DTSTAMP:20261115T000000Z',
+      'DTSTART;VALUE=DATE:20270131', 'DTEND;VALUE=DATE:20270201',
+      'SUMMARY:Plazas con Ingenioso: hasta el 31 de enero', 'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    var url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+    var a = document.createElement('a');
+    a.href = url; a.download = 'plazas-ingenioso.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    track('plazas_calendario');
+  });
+})();
