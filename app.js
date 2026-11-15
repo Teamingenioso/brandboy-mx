@@ -221,7 +221,7 @@
           '</form>';
       } else if (id === 'fin') {
         h = '<div class="bb-done"><div class="bb-check" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
-          '<h2 id="bbTitle">Listo, ' + esc((a.nombre || '').split(' ')[0]) + '</h2><p class="bb-sub">Se abrió WhatsApp con tu información. Mándalo y te escribimos para agendar tu llamada.</p>' +
+          '<h2 id="bbTitle">Listo, ' + esc((a.nombre || '').split(' ')[0]) + '</h2><p class="bb-sub" id="bbCopyMsg">Copiando tu mensaje…</p>' + '<textarea class="bb-input" id="bbManual" rows="6" readonly hidden></textarea>' +
           '<button type="button" class="bb-next ghosty" id="bbResend">Abrir WhatsApp otra vez</button></div>';
       } else if (id === 'fin_viendo') {
         h = '<div class="bb-done"><h2 id="bbTitle">Va, sin presión</h2><p class="bb-sub">Mientras lo piensas, sígueme. Ahí suelto lo que sí le funciona a los negocios para vender más.</p>' +
@@ -319,8 +319,37 @@
       return lines.join('\n');
     }
 
+    // El mensaje NO va en la URL: se copia al portapapeles y se abre WhatsApp sin texto.
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallbackCopy(text); });
+      }
+      return Promise.resolve(fallbackCopy(text));
+    }
+    function showCopyResult(ok, text) {
+      var p = document.getElementById('bbCopyMsg'), ta = document.getElementById('bbManual');
+      if (!p) return;
+      if (ok) {
+        p.textContent = 'Tu mensaje ya está copiado. En WhatsApp, mantén presionado el cuadro de texto, elige Pegar y envíalo. Después te escribimos para agendar tu llamada.';
+        if (ta) ta.hidden = true;
+      } else {
+        p.textContent = 'No pudimos copiarlo automáticamente. Selecciona el texto de abajo, cópialo y pégalo en el chat de WhatsApp.';
+        if (ta) { ta.value = text; ta.hidden = false; ta.focus(); ta.select(); }
+      }
+    }
     function openWhatsApp() {
-      window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(message()), '_blank', 'noopener,noreferrer');
+      var text = message();
+      copyText(text).then(function (ok) { showCopyResult(ok, text); });
+      window.open('https://wa.me/' + WA_NUMBER, '_blank', 'noopener,noreferrer');
     }
 
     function showToast() {
