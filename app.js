@@ -387,7 +387,12 @@
   }
   trigger.addEventListener('click', function () { if (!dlg.open) { dlg.showModal(); track('plazas_abiertas'); } });
   document.getElementById('slClose').addEventListener('click', function () { dlg.close(); });
-  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target !== dlg) return;
+    var r = dlg.getBoundingClientRect();
+    var outside = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+    if (outside) dlg.close();
+  });
   icsBtn.addEventListener('click', function () {
     track('plazas_calendario_apple');
     var url = URL.createObjectURL(new Blob([icsText()], { type: 'text/calendar;charset=utf-8' }));
