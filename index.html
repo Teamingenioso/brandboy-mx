@@ -482,12 +482,15 @@
   .agency-btn:focus-visible { outline: 2px solid var(--lime-hi); outline-offset: 3px; }
   .follow-text a { color: var(--lime-hi); }
 
+  .hero-photo { position: fixed; top: 50%; right: -10vw; width: min(80vw, 660px); aspect-ratio: 1; transform: translateY(-50%); background: url("hero-photo.jpg") center / cover no-repeat; opacity: .6; pointer-events: none; z-index: -1; -webkit-mask-image: linear-gradient(to left, #000 30%, transparent 85%), linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(to left, #000 30%, transparent 85%), linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); mask-composite: intersect; }
+  @media (max-width: 640px) { .hero-photo { width: 110vw; right: -42vw; opacity: .34; } }
+
 </style>
 </head>
 <body>
 <div class="glow" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="cursor" id="cursor"></i></div>
 <div class="grain" aria-hidden="true"></div>
-<div class="ghost" aria-hidden="true">Próximamente</div>
+<div class="ghost" aria-hidden="true">Próximamente</div><div class="hero-photo" aria-hidden="true"></div>
 
 <main class="stage">
   <div class="tag"><b></b> Algo viene</div>
