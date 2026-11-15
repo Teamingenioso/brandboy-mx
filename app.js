@@ -343,23 +343,62 @@
   'use strict';
   var dlg = document.getElementById('slDlg');
   var trigger = document.querySelector('[data-slots]');
-  if (!dlg || !trigger) return;
+  var cal = document.getElementById('slCal');
+  if (!dlg || !trigger || !cal) return;
+  var EV = {
+    title: 'Plazas con Ingenioso: hasta el 31 de enero',
+    start: '20270131',
+    end: '20270201',
+    location: 'Villahermosa Tabasco México',
+    desc: 'Último día para abrir proyectos con Ingenioso (agencia de marketing y branding). Escríbenos por WhatsApp para platicar tu proyecto.'
+  };
+  var isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
   function track(name) { if (window.BB && window.BB.track) window.BB.track(name, {}); }
+  function fold(line) {
+    var out = [];
+    while (line.length > 60) { out.push(line.slice(0, 60)); line = ' ' + line.slice(60); }
+    out.push(line);
+    return out.join('\r\n');
+  }
+  function ics() {
+    var now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    return [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Ingenioso//Plazas//ES', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:plazas-brandboy-' + EV.start + '@brandboy.mx',
+      'DTSTAMP:' + now,
+      'DTSTART;VALUE=DATE:' + EV.start,
+      'DTEND;VALUE=DATE:' + EV.end,
+      'SUMMARY:' + EV.title,
+      'DESCRIPTION:' + EV.desc + ' ' + location.href,
+      'LOCATION:' + EV.location,
+      'URL:' + location.href,
+      'STATUS:CONFIRMED',
+      'TRANSP:TRANSPARENT',
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Plazas con Ingenioso', 'TRIGGER:-P7D', 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR'
+    ].map(fold).join('\r\n');
+  }
+  function googleUrl() {
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=' + encodeURIComponent(EV.title) +
+      '&dates=' + EV.start + '/' + EV.end +
+      '&details=' + encodeURIComponent(EV.desc + ' ' + location.href) +
+      '&location=' + encodeURIComponent(EV.location);
+  }
   trigger.addEventListener('click', function () { if (!dlg.open) { dlg.showModal(); track('plazas_abiertas'); } });
   document.getElementById('slClose').addEventListener('click', function () { dlg.close(); });
   dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
-  document.getElementById('slCal').addEventListener('click', function () {
-    var ics = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Brandboy//Plazas//ES', 'BEGIN:VEVENT',
-      'UID:plazas-brandboy-20270131@brandboy.mx', 'DTSTAMP:20261115T000000Z',
-      'DTSTART;VALUE=DATE:20270131', 'DTEND;VALUE=DATE:20270201',
-      'SUMMARY:Plazas con Ingenioso: hasta el 31 de enero', 'END:VEVENT', 'END:VCALENDAR'
-    ].join('\r\n');
-    var url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-    var a = document.createElement('a');
-    a.href = url; a.download = 'plazas-ingenioso.ics';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  cal.addEventListener('click', function () {
     track('plazas_calendario');
+    if (isApple) {
+      var url = URL.createObjectURL(new Blob([ics()], { type: 'text/calendar;charset=utf-8' }));
+      var a = document.createElement('a');
+      a.href = url; a.download = 'plazas-ingenioso.ics';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    } else {
+      window.open(googleUrl(), '_blank', 'noopener,noreferrer');
+    }
   });
 })();
