@@ -346,11 +346,11 @@
   var cal = document.getElementById('slCal');
   if (!dlg || !trigger || !cal) return;
   var EV = {
-    title: 'Plazas con Ingenioso: hasta el 31 de enero',
-    start: '20270131',
-    end: '20270201',
+    title: 'Abrimos plazas con Ingenioso el 1 de febrero',
+    start: '20270201',
+    end: '20270202',
     location: 'Villahermosa Tabasco México',
-    desc: 'Último día para abrir proyectos con Ingenioso (agencia de marketing y branding). Escríbenos por WhatsApp para platicar tu proyecto.'
+    desc: 'Abrimos plazas para trabajar con Ingenioso (agencia de marketing y branding). Escríbenos por WhatsApp para platicar tu proyecto.'
   };
   var isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
   function track(name) { if (window.BB && window.BB.track) window.BB.track(name, {}); }
@@ -375,7 +375,7 @@
       'URL:' + location.href,
       'STATUS:CONFIRMED',
       'TRANSP:TRANSPARENT',
-      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Plazas con Ingenioso', 'TRIGGER:-P7D', 'END:VALARM',
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Abrimos plazas con Ingenioso el 1 de febrero', 'TRIGGER:-P7D', 'END:VALARM',
       'END:VEVENT', 'END:VCALENDAR'
     ].map(fold).join('\r\n');
   }
