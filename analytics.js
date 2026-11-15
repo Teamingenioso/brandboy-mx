@@ -1,7 +1,7 @@
 /* Brandboy — medición con Google Analytics 4, solo con permiso del visitante. */
 var BB_CONFIG = {
   // ID de medición de GA4 (formato G-XXXXXXXXXX). Vacío = Analytics apagado y sin aviso de cookies.
-  GA_ID: ''
+  GA_ID: 'G-BJM1TZXH0L'
 };
 
 window.BB = (function () {
